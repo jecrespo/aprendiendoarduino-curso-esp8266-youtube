@@ -28,14 +28,14 @@ void loop() {
   {
     Serial.print(n);
     Serial.println(" networks found");
-    Serial.println("num\tSSID\t\tRSSI\tBSSID\tchannel\tencryption");
+    Serial.println("num\tSSID\t\tRSSI\tBSSID\t\tchannel\tencryption");
 
     for (int i = 0; i < n; ++i)
     {
       // Print SSID and RSSI for each network found
       Serial.print(i + 1);
       Serial.print("\t");
-      Serial.print(WiFi.isHidden(i) == true ? "Oculto!!!" : WiFi.SSID(i));
+      Serial.print(muestra_SSID(WiFi.SSID(i)));
       Serial.print("\t");
       Serial.print(WiFi.RSSI(i));
       Serial.print("dBm\t");
@@ -43,7 +43,8 @@ void loop() {
       Serial.print("\t");
       Serial.print(WiFi.channel(i));
       Serial.print("\t");
-      Serial.println((WiFi.encryptionType(i) == ENC_TYPE_NONE) ? " " : "*");
+      Serial.println((muestra_encriptacion(WiFi.encryptionType(i))));
+
       delay(10);
     }
   }
@@ -52,3 +53,38 @@ void loop() {
   // Wait a bit before scanning again
   delay(5000);
 }
+
+String muestra_encriptacion (int wifiEncryp) {
+  String encriptacion = "";
+
+  switch (wifiEncryp) {
+    case ENC_TYPE_WEP:
+      encriptacion = "WEP";
+      break;
+    case ENC_TYPE_TKIP:
+      encriptacion = "WPA/PSK";
+      break;
+    case ENC_TYPE_CCMP:
+      encriptacion = "WPA2/PSK";
+      break;
+    case ENC_TYPE_NONE:
+      encriptacion = "open network";
+      break;
+    case ENC_TYPE_AUTO:
+      encriptacion = "WPA/WPA2/PSK";
+      break;
+  }
+  return encriptacion;
+}
+
+String muestra_SSID (String SSID_name) {
+  int longitud = SSID_name.length();
+
+  if (SSID_name == "")
+    return ("Oculto!!!");
+  else if (longitud < 9)
+    return SSID_name + "\t";
+  else
+    return SSID_name;
+}
+
