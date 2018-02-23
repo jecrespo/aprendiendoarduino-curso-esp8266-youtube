@@ -1,5 +1,5 @@
 /*
-    This sketch demonstrates how to set up a simple HTTP-like server.
+  This sketch demonstrates how to set up a simple HTTP-like server.
   Web:
   <!DOCTYPE html>
   <html>
@@ -10,8 +10,9 @@
   </form>
   </body>
   </html>
-    server_ip is the IP address of the ESP8266 module, will be
-    printed to Serial when the module is connected.
+  
+  server_ip is the IP address of the ESP8266 module, will be
+  printed to Serial when the module is connected.
 */
 
 #include <ESP8266WiFi.h>
