@@ -14,7 +14,7 @@ void setup() {
 
   // We start by connecting to a WiFi network
   WiFi.mode(WIFI_STA);
-  WiFiMulti.addAP("SSID", "passpasspass");
+  WiFiMulti.addAP("SSID", "password");
 
   Serial.println();
   Serial.println();
@@ -53,12 +53,28 @@ void loop() {
 
   // This will send the request to the server
   client.println("GET /servicios/aprendiendoarduino/ HTTP/1.0");
+  client.println("Host: www.aprendiendoarduino.com");
   client.println();
 
-  //read all lines from server
-  while (client.available()) {
-    String line = client.readStringUntil('\r');
-    Serial.println(line);
+  while (client.available() == 0) {
+    static int count = 0;
+    Serial.print(".");
+    delay(250);
+    if (count > 12) //waiting more than 3 seconds
+      break;
+  }
+  Serial.println();
+
+  if (client.connected()) {
+    //read all lines from server
+    do {
+      String line = client.readStringUntil('\r'); //read line by line
+      Serial.print(line);
+    } while (client.available() > 0);
+    Serial.println();
+  }
+  else {
+    Serial.println("Connection error.");
   }
 
   Serial.println("closing connection");
@@ -67,4 +83,3 @@ void loop() {
   Serial.println("wait 5 sec...");
   delay(5000);
 }
-
