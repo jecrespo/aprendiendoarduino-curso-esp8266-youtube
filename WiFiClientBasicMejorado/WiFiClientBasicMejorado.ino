@@ -55,17 +55,20 @@ void loop() {
   client.println("GET /servicios/aprendiendoarduino/ HTTP/1.0");
   client.println("Host: www.aprendiendoarduino.com");
   client.println();
+    
+  int timeout_flag = 0;
 
   while (client.available() == 0) {
     static int count = 0;
     Serial.print(".");
     delay(250);
     if (count > 12) //waiting more than 3 seconds
+      timeout_flag = 1;
       break;
   }
   Serial.println();
 
-  if (client.connected()) {
+  if (timeout_flag == 0) {
     //read all lines from server
     do {
       String line = client.readStringUntil('\r'); //read line by line
@@ -74,7 +77,7 @@ void loop() {
     Serial.println();
   }
   else {
-    Serial.println("Connection error.");
+    Serial.println("Connection error. Server doesn't respond");
   }
 
   Serial.println("closing connection");
